@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="A friendly food-order queue that keeps kitchen orders organized in first-in, first-out order."
+    />
+    <meta name="theme-color" content="#f7f5ef" />
+    <title>Counter &amp; Co. — Order Queue</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Counter and Co. home">
+          <span class="brand-mark" aria-hidden="true">C</span>
+          <span>counter<span class="brand-dot">&amp;</span>co.</span>
+        </a>
+        <div class="service-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>Kitchen open</span>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <section class="page-heading" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow"><span aria-hidden="true">✳</span> YOUR DAILY DASHBOARD</p>
+            <h1 id="page-title">Order queue<span class="heading-period">.</span></h1>
+            <p class="page-description">
+              Good food takes a little time. Here's what's cooking.
+            </p>
+          </div>
+          <p class="today-date" id="today-date"></p>
+        </section>
+
+        <section class="dashboard-grid" aria-label="Order management">
+          <section class="panel new-order-panel" aria-labelledby="new-order-title">
+            <div class="panel-heading">
+              <div class="panel-icon panel-icon-warm" aria-hidden="true">＋</div>
+              <div>
+                <h2 id="new-order-title">New order</h2>
+                <p>Let's make someone's day.</p>
+              </div>
+            </div>
+            <form id="order-form">
+              <label for="customer-name">Customer name</label>
+              <input
+                id="customer-name"
+                name="customerName"
+                type="text"
+                placeholder="e.g. Jamie Parker"
+                maxlength="80"
+                autocomplete="name"
+                required
+              />
+
+              <label for="order-items">What are they having?</label>
+              <textarea
+                id="order-items"
+                name="items"
+                placeholder="e.g. 2 smash burgers, fries"
+                rows="3"
+                maxlength="300"
+                required
+              ></textarea>
+
+              <button class="button button-primary button-full" type="submit">
+                <span aria-hidden="true">＋</span>
+                Add to queue
+              </button>
+              <p class="form-hint">
+                Orders are added to the end of the line.
+              </p>
+            </form>
+          </section>
+
+          <section class="panel queue-panel" aria-labelledby="queue-title">
+            <div class="queue-heading">
+              <div class="panel-heading">
+                <div class="panel-icon panel-icon-green" aria-hidden="true">≋</div>
+                <div>
+                  <h2 id="queue-title">In the kitchen</h2>
+                  <p>Your orders, in the order they came in.</p>
+                </div>
+              </div>
+              <span class="queue-count" id="queue-count" aria-live="polite">0 waiting</span>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">ORDER</th>
+                    <th scope="col">CUSTOMER</th>
+                    <th scope="col">ORDER DETAILS</th>
+                    <th scope="col">PLACED</th>
+                    <th scope="col"><span class="visually-hidden">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody id="order-list"></tbody>
+              </table>
+            </div>
+
+            <div class="empty-state" id="empty-state">
+              <div class="empty-illustration" aria-hidden="true">🍽️</div>
+              <h3>All caught up!</h3>
+              <p>Your queue is empty. Add a new order to get things rolling.</p>
+            </div>
+
+            <div class="queue-footer">
+              <p class="fifo-note"><span aria-hidden="true">↳</span> First in, first out</p>
+              <button class="button button-serve" id="serve-next" type="button" disabled>
+                Serve next order
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </section>
+        </section>
+
+        <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
+      </main>
+
+      <footer class="footer">
+        <span>Made with care, served in order.</span>
+        <span class="footer-separator" aria-hidden="true">·</span>
+        <span>FIFO, the friendly way.</span>
+      </footer>
+    </div>
+  </body>
+</html>
