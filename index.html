@@ -152,6 +152,11 @@
     <script>
       if (document.documentElement.dataset.openedFromFile === "true") {
         document.querySelector("#runtime-notice").hidden = false;
+        document
+          .querySelectorAll("#order-form input, #order-form textarea, #order-form button[type='submit']")
+          .forEach((control) => {
+            control.disabled = true;
+          });
       }
     </script>
   </body>

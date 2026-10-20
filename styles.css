@@ -309,6 +309,13 @@ textarea {
   box-shadow: 0 6px 13px rgb(0 0 0 / 18%);
 }
 
+.button-primary:disabled {
+  cursor: not-allowed;
+  color: #737373;
+  background: #e5e5e5;
+  box-shadow: none;
+}
+
 .button-full {
   width: 100%;
 }
