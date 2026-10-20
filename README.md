@@ -8,6 +8,8 @@ the oldest waiting order is always served next.
 
 - Add orders with a customer name, food items, order number, and time placed.
 - See waiting orders in arrival order, with the next order highlighted.
+- Edit a waiting order to correct its details or add a customer top-up without
+  changing its place in line.
 - Serve the oldest waiting order or cancel an individual order.
 - Save the queue in this browser's local storage so it is available after a
   refresh or reopening the app in the same browser.

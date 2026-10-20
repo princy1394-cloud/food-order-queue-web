@@ -484,6 +484,116 @@ td {
   background: #e5e5e5;
 }
 
+.order-actions {
+  min-width: 112px;
+  white-space: nowrap;
+}
+
+.button-edit {
+  min-height: 28px;
+  padding: 0 8px;
+  color: #333333;
+  background: #f0f0f0;
+  font-size: 10px;
+}
+
+.button-edit:hover {
+  background: #e5e5e5;
+}
+
+.edit-dialog {
+  width: min(460px, calc(100% - 32px));
+  max-width: none;
+  max-height: calc(100% - 32px);
+  padding: 0;
+  overflow: auto;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  color: #262626;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgb(0 0 0 / 18%);
+}
+
+.edit-dialog::backdrop {
+  background: rgb(0 0 0 / 42%);
+  backdrop-filter: blur(2px);
+}
+
+.edit-form {
+  display: block;
+  margin: 0;
+  padding: 25px;
+}
+
+.edit-dialog-heading {
+  margin-bottom: 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.edit-dialog-heading .eyebrow {
+  margin-bottom: 8px;
+}
+
+.edit-dialog-heading h2 {
+  margin: 0 0 7px;
+  color: #202020;
+  font-size: 22px;
+  letter-spacing: -0.7px;
+}
+
+.edit-dialog-description {
+  max-width: 350px;
+  margin: 0;
+  color: #737373;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.edit-form label {
+  margin-top: 15px;
+}
+
+.edit-form input,
+.edit-form textarea {
+  margin-bottom: 2px;
+}
+
+.dialog-close {
+  width: 30px;
+  min-height: 30px;
+  flex: 0 0 auto;
+  color: #666666;
+  background: #f1f1f1;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.dialog-close:hover {
+  color: #111111;
+  background: #e5e5e5;
+}
+
+.edit-dialog-actions {
+  margin-top: 22px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.button-secondary {
+  padding: 0 13px;
+  border: 1px solid #e0e0e0;
+  color: #404040;
+  background: #ffffff;
+}
+
+.button-secondary:hover {
+  background: #f5f5f5;
+}
+
 .empty-state {
   padding: 39px 20px 43px;
   color: #666666;
@@ -630,6 +740,10 @@ td {
   form .action-feedback,
   form .runtime-notice {
     grid-column: 1 / -1;
+  }
+
+  .edit-form {
+    display: block;
   }
 }
 

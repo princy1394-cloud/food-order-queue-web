@@ -6,6 +6,14 @@ const elements = {
   form: document.querySelector("#order-form"),
   customerName: document.querySelector("#customer-name"),
   items: document.querySelector("#order-items"),
+  editDialog: document.querySelector("#edit-dialog"),
+  editForm: document.querySelector("#edit-form"),
+  editOrderId: document.querySelector("#edit-order-id"),
+  editOrderNumber: document.querySelector("#edit-order-number"),
+  editCustomerName: document.querySelector("#edit-customer-name"),
+  editItems: document.querySelector("#edit-order-items"),
+  closeEditDialog: document.querySelector("#close-edit-dialog"),
+  cancelEdit: document.querySelector("#cancel-edit"),
   orderList: document.querySelector("#order-list"),
   queueCount: document.querySelector("#queue-count"),
   queuePanel: document.querySelector("#queue-panel"),
@@ -76,12 +84,17 @@ elements.serveNext.addEventListener("click", () => {
 });
 
 elements.orderList.addEventListener("click", (event) => {
-  const button = event.target.closest("button[data-order-number]");
+  const button = event.target.closest("button[data-order-action]");
   if (!button) {
     return;
   }
 
   const orderNumber = button.dataset.orderNumber;
+  if (button.dataset.orderAction === "edit") {
+    openEditOrder(orderNumber);
+    return;
+  }
+
   if (!queue.cancel(orderNumber)) {
     showToast(`Order #${orderNumber} is no longer waiting.`, "error");
     renderQueue();
@@ -96,6 +109,44 @@ elements.orderList.addEventListener("click", (event) => {
       : `Order #${orderNumber} was canceled, but the updated queue could not be saved.`,
     saved ? "success" : "warning",
   );
+});
+
+elements.editForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  try {
+    const order = queue.update(elements.editOrderId.value, {
+      customerName: elements.editCustomerName.value,
+      items: elements.editItems.value,
+    });
+
+    if (!order) {
+      elements.editDialog.close();
+      renderQueue();
+      showToast("That order is no longer waiting in the queue.", "error");
+      return;
+    }
+
+    renderQueue();
+    const saved = saveQueue();
+    elements.editDialog.close();
+    setActionFeedback(
+      saved
+        ? `Order #${order.number} updated and saved. Its place in the queue is unchanged.`
+        : `Order #${order.number} updated for this session, but browser storage is unavailable.`,
+      saved ? "success" : "warning",
+    );
+  } catch (error) {
+    showToast(`Could not update the order: ${error.message}`, "error");
+  }
+});
+
+elements.closeEditDialog.addEventListener("click", () => {
+  elements.editDialog.close();
+});
+
+elements.cancelEdit.addEventListener("click", () => {
+  elements.editDialog.close();
 });
 
 function loadQueue() {
@@ -144,7 +195,7 @@ function createOrderRow(order, isNext) {
     createCell(order.customerName, "customer-name"),
     createCell(order.items, "order-items"),
     createCell(formatOrderTime(order.timePlaced), "order-time"),
-    createCancelCell(order.number, order.customerName),
+    createOrderActionsCell(order.number, order.customerName),
   );
 
   if (isNext) {
@@ -164,20 +215,51 @@ function createCell(text, className) {
   return cell;
 }
 
-function createCancelCell(orderNumber, customerName) {
+function createOrderActionsCell(orderNumber, customerName) {
   const cell = document.createElement("td");
-  const button = document.createElement("button");
-  button.className = "button button-cancel";
-  button.type = "button";
-  button.dataset.orderNumber = orderNumber;
-  button.setAttribute(
+  cell.className = "order-actions";
+
+  const editButton = document.createElement("button");
+  editButton.className = "button button-edit";
+  editButton.type = "button";
+  editButton.dataset.orderAction = "edit";
+  editButton.dataset.orderNumber = orderNumber;
+  editButton.setAttribute(
+    "aria-label",
+    `Edit order #${orderNumber} for ${customerName}`,
+  );
+  editButton.title = "Edit order";
+  editButton.textContent = "Edit";
+
+  const cancelButton = document.createElement("button");
+  cancelButton.className = "button button-cancel";
+  cancelButton.type = "button";
+  cancelButton.dataset.orderAction = "cancel";
+  cancelButton.dataset.orderNumber = orderNumber;
+  cancelButton.setAttribute(
     "aria-label",
     `Cancel order #${orderNumber} for ${customerName}`,
   );
-  button.title = "Cancel order";
-  button.textContent = "×";
-  cell.append(button);
+  cancelButton.title = "Cancel order";
+  cancelButton.textContent = "×";
+  cell.append(editButton, cancelButton);
   return cell;
+}
+
+function openEditOrder(orderNumber) {
+  const order = queue.orders.find((entry) => entry.number === orderNumber);
+  if (!order) {
+    renderQueue();
+    showToast(`Order #${orderNumber} is no longer waiting.`, "error");
+    return;
+  }
+
+  elements.editOrderId.value = order.number;
+  elements.editOrderNumber.textContent = `#${order.number}`;
+  elements.editCustomerName.value = order.customerName;
+  elements.editItems.value = order.items;
+  elements.editDialog.showModal();
+  elements.editItems.focus();
 }
 
 function formatOrderTime(timePlaced) {

@@ -47,6 +47,40 @@ test("cancels only the selected waiting order and preserves queue order", () => 
   assert.equal(queue.cancel("2"), false);
 });
 
+test("updates an order without changing its number, time, or FIFO position", () => {
+  const queue = new FoodOrderQueue();
+  const first = queue.add(makeOrder("Jamie", "1 burger"));
+  queue.add(makeOrder("Morgan", "2 salads"));
+
+  const updated = queue.update(first.number, {
+    customerName: "Jamie Parker",
+    items: "1 burger, extra fries",
+  });
+
+  assert.deepEqual(updated, {
+    ...first,
+    customerName: "Jamie Parker",
+    items: "1 burger, extra fries",
+  });
+  assert.deepEqual(
+    queue.orders.map((order) => order.number),
+    ["1", "2"],
+  );
+  assert.equal(queue.serveNext().items, "1 burger, extra fries");
+});
+
+test("rejects blank order updates without changing the saved order", () => {
+  const queue = new FoodOrderQueue();
+  const original = queue.add(makeOrder("Jamie", "1 burger"));
+
+  assert.throws(
+    () => queue.update(original.number, { customerName: "Jamie", items: " " }),
+    /Order items cannot be blank/,
+  );
+  assert.deepEqual(queue.orders[0], original);
+  assert.equal(queue.update("999", { customerName: "Jamie", items: "fries" }), null);
+});
+
 test("keeps removed order numbers unique when new orders arrive", () => {
   const queue = new FoodOrderQueue();
   queue.add(makeOrder("Jamie"));

@@ -143,6 +143,54 @@
         <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
       </main>
 
+      <dialog class="edit-dialog" id="edit-dialog" aria-labelledby="edit-dialog-title">
+        <form class="edit-form" id="edit-form">
+          <div class="edit-dialog-heading">
+            <div>
+              <p class="eyebrow">UPDATE A WAITING ORDER</p>
+              <h2 id="edit-dialog-title">Edit order <span id="edit-order-number"></span></h2>
+              <p class="edit-dialog-description">
+                Add the customer's top-up to the order details. Its place in the queue stays the same.
+              </p>
+            </div>
+            <button
+              class="button dialog-close"
+              id="close-edit-dialog"
+              type="button"
+              aria-label="Close edit order dialog"
+            >×</button>
+          </div>
+          <input id="edit-order-id" name="orderNumber" type="hidden" />
+
+          <label for="edit-customer-name">Customer name</label>
+          <input
+            id="edit-customer-name"
+            name="customerName"
+            type="text"
+            maxlength="80"
+            required
+          />
+
+          <label for="edit-order-items">Order details</label>
+          <textarea
+            id="edit-order-items"
+            name="items"
+            rows="4"
+            maxlength="300"
+            required
+          ></textarea>
+
+          <div class="edit-dialog-actions">
+            <button class="button button-secondary" id="cancel-edit" type="button">
+              Keep original
+            </button>
+            <button class="button button-primary" type="submit">
+              Save changes
+            </button>
+          </div>
+        </form>
+      </dialog>
+
       <footer class="footer">
         <span>Made with care, served in order.</span>
         <span class="footer-separator" aria-hidden="true">·</span>

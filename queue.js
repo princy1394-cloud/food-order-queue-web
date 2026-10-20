@@ -44,6 +44,25 @@ export class FoodOrderQueue {
     return this.#orders.shift() ?? null;
   }
 
+  update(orderNumber, { customerName, items }) {
+    const index = this.#orders.findIndex(
+      (order) => order.number === String(orderNumber),
+    );
+
+    if (index === -1) {
+      return null;
+    }
+
+    const updatedOrder = {
+      ...this.#orders[index],
+      customerName: FoodOrderQueue.#requireText(customerName, "Customer name"),
+      items: FoodOrderQueue.#requireText(items, "Order items"),
+    };
+    this.#orders[index] = updatedOrder;
+
+    return { ...updatedOrder };
+  }
+
   cancel(orderNumber) {
     const index = this.#orders.findIndex(
       (order) => order.number === String(orderNumber),
