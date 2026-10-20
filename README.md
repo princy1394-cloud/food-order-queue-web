@@ -16,6 +16,9 @@ the oldest waiting order is always served next.
 
 Storage is local to the current browser and device. This demonstration does not
 have a server, user accounts, shared restaurant data, or cross-device sync.
+After selecting **Add to queue**, the input form clears and the order appears
+in the kitchen list. A confirmation below the form tells you whether the order
+was saved. On smaller screens, the app scrolls the order list into view.
 
 ## Run locally
 
@@ -28,6 +31,10 @@ npm start
 Then open [http://localhost:4173](http://localhost:4173) in a browser. To choose
 a different port, set the `PORT` environment variable before running the
 command.
+
+Do not open `index.html` directly from File Explorer: browser module security
+can prevent the app's JavaScript from running. Start the local server with
+`npm start` and use the localhost address above.
 
 ## Run the queue tests
 

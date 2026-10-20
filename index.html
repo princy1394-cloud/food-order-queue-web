@@ -16,6 +16,11 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
+    <script>
+      if (window.location.protocol === "file:") {
+        document.documentElement.dataset.openedFromFile = "true";
+      }
+    </script>
     <script type="module" src="./app.js"></script>
   </head>
   <body>
@@ -79,12 +84,20 @@
                 Add to queue
               </button>
               <p class="form-hint">
-                Orders are added to the end of the line.
+                Click “Add to queue” to submit. The form clears after an order
+                is added; your order will appear in the kitchen list.
+              </p>
+              <p class="action-feedback" id="action-feedback" role="status"
+                aria-live="polite" hidden></p>
+              <p class="runtime-notice" id="runtime-notice" hidden>
+                The app cannot process orders when opened directly as a file.
+                Run <code>npm start</code>, then open
+                <code>http://localhost:4173</code> in your browser.
               </p>
             </form>
           </section>
 
-          <section class="panel queue-panel" aria-labelledby="queue-title">
+          <section class="panel queue-panel" id="queue-panel" aria-labelledby="queue-title">
             <div class="queue-heading">
               <div class="panel-heading">
                 <div class="panel-icon panel-icon-green" aria-hidden="true">≋</div>
@@ -136,5 +149,10 @@
         <span>FIFO, the friendly way.</span>
       </footer>
     </div>
+    <script>
+      if (document.documentElement.dataset.openedFromFile === "true") {
+        document.querySelector("#runtime-notice").hidden = false;
+      }
+    </script>
   </body>
 </html>

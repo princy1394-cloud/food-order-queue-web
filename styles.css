@@ -321,7 +321,36 @@ textarea {
   margin: 10px 0 0;
   color: #9aa197;
   font-size: 10px;
+  line-height: 1.55;
   text-align: center;
+}
+
+.action-feedback,
+.runtime-notice {
+  margin: 12px 0 0;
+  padding: 10px 11px;
+  border: 1px solid #e3ebdf;
+  border-radius: 8px;
+  color: #45634d;
+  background: #f3f7f0;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.action-feedback[data-kind="warning"],
+.runtime-notice {
+  border-color: #f0dfc8;
+  color: #76512e;
+  background: #fff8ed;
+}
+
+.runtime-notice code {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.runtime-notice:not([hidden]) {
+  display: block;
 }
 
 .queue-panel {
@@ -589,7 +618,9 @@ td {
   form label:nth-of-type(2),
   form textarea,
   form .button,
-  form .form-hint {
+  form .form-hint,
+  form .action-feedback,
+  form .runtime-notice {
     grid-column: 1 / -1;
   }
 }

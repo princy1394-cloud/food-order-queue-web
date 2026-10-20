@@ -8,9 +8,11 @@ const elements = {
   items: document.querySelector("#order-items"),
   orderList: document.querySelector("#order-list"),
   queueCount: document.querySelector("#queue-count"),
+  queuePanel: document.querySelector("#queue-panel"),
   emptyState: document.querySelector("#empty-state"),
   serveNext: document.querySelector("#serve-next"),
   todayDate: document.querySelector("#today-date"),
+  actionFeedback: document.querySelector("#action-feedback"),
   toast: document.querySelector("#toast"),
 };
 
@@ -42,12 +44,13 @@ elements.form.addEventListener("submit", (event) => {
     const saved = saveQueue();
     elements.form.reset();
     elements.customerName.focus();
-    showToast(
+    setActionFeedback(
       saved
-        ? `Order #${order.number} added to the queue.`
-        : `Order #${order.number} added for this session; browser storage is unavailable.`,
-      saved ? "success" : "error",
+        ? `Order #${order.number} was added to the kitchen queue and saved in this browser.`
+        : `Order #${order.number} was added for this session, but browser storage is unavailable.`,
+      saved ? "success" : "warning",
     );
+    revealQueueOnSmallScreen();
   } catch (error) {
     showToast(`Could not add the order: ${error.message}`, "error");
   }
@@ -64,11 +67,11 @@ elements.serveNext.addEventListener("click", () => {
 
   renderQueue();
   const saved = saveQueue();
-  showToast(
+  setActionFeedback(
     saved
-      ? `Order #${order.number} for ${order.customerName} has been served.`
-      : `Order #${order.number} served. The updated queue could not be saved.`,
-    saved ? "success" : "error",
+      ? `Order #${order.number} for ${order.customerName} was served. The updated queue is saved in this browser.`
+      : `Order #${order.number} was served, but the updated queue could not be saved.`,
+    saved ? "success" : "warning",
   );
 });
 
@@ -87,11 +90,11 @@ elements.orderList.addEventListener("click", (event) => {
 
   renderQueue();
   const saved = saveQueue();
-  showToast(
+  setActionFeedback(
     saved
-      ? `Order #${orderNumber} canceled.`
-      : `Order #${orderNumber} canceled for this session; browser storage is unavailable.`,
-    saved ? "success" : "error",
+      ? `Order #${orderNumber} was canceled. The updated queue is saved in this browser.`
+      : `Order #${orderNumber} was canceled, but the updated queue could not be saved.`,
+    saved ? "success" : "warning",
   );
 });
 
@@ -197,6 +200,26 @@ function showToast(message, kind) {
   toastTimeout = window.setTimeout(() => {
     elements.toast.hidden = true;
   }, 4000);
+}
+
+function setActionFeedback(message, kind) {
+  elements.actionFeedback.textContent = message;
+  elements.actionFeedback.dataset.kind = kind;
+  elements.actionFeedback.hidden = false;
+}
+
+function revealQueueOnSmallScreen() {
+  if (!window.matchMedia("(max-width: 860px)").matches) {
+    return;
+  }
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  elements.queuePanel.scrollIntoView({
+    behavior: reduceMotion ? "auto" : "smooth",
+    block: "start",
+  });
 }
 
 renderQueue();
